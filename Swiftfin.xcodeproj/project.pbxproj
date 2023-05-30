@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 54;
+	objectVersion = 53;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -1462,6 +1462,7 @@
 			);
 			path = "Swiftfin tvOS";
 			sourceTree = "<group>";
+			usesTabs = 0;
 		};
 		535870752669D60C00D05A09 /* Shared */ = {
 			isa = PBXGroup;
@@ -2912,8 +2913,7 @@
 /* Begin PBXShellScriptBuildPhase section */
 		6286F09E271C093000C40ED5 /* R.swift */ = {
 			isa = PBXShellScriptBuildPhase;
-			alwaysOutOfDate = 1;
-			buildActionMask = 2147483647;
+			buildActionMask = 8;
 			files = (
 			);
 			inputFileListPaths = (
@@ -2925,14 +2925,13 @@
 			);
 			outputPaths = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
+			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
 			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"swiftgen\"\n";
 		};
 		6286F0A3271C0ABA00C40ED5 /* R.swift */ = {
 			isa = PBXShellScriptBuildPhase;
-			alwaysOutOfDate = 1;
-			buildActionMask = 2147483647;
+			buildActionMask = 8;
 			files = (
 			);
 			inputFileListPaths = (
@@ -2944,9 +2943,9 @@
 			);
 			outputPaths = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
+			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"swiftgen\"\n";
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path\n\"swiftgen\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
