@@ -47,12 +47,19 @@ struct LibraryView: View {
     }
 
     @ViewBuilder
-    private var libraryItemsView: some View {
-        PagingLibraryView(viewModel: viewModel)
-            .onSelect { item in
-                baseItemOnSelect(item)
-            }
-            .ignoresSafeArea()
+    var libraryItemsView: some View {
+        HStack(spacing: 0) {
+            PagingLibraryView(viewModel: viewModel)
+                .onSelect { item in
+                    baseItemOnSelect(item)
+                }
+                .ignoresSafeArea()
+            LetteredScrollbar(viewModel: viewModel.filterViewModel)
+                .onSelect { filterCoordinatorParameters in
+                    router.route(to: \.filter, filterCoordinatorParameters)
+                }
+                .padding(.vertical, 1)
+        }
     }
 
     var body: some View {
