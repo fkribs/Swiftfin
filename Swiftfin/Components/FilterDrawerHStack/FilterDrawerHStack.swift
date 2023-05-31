@@ -15,10 +15,6 @@ struct FilterDrawerHStack: View {
     var viewModel: FilterViewModel
     private var onSelect: (FilterCoordinator.Parameters) -> Void
     
-    let letters: [String] = (0..<26).map { index in
-        String(UnicodeScalar("A".unicodeScalars.first!.value + index)!)
-    }
-
     var body: some View {
         VStack {
             HStack(spacing: 4) {
@@ -77,28 +73,6 @@ struct FilterDrawerHStack: View {
                     }
             }
             .padding(.horizontal, 4)
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 8) {
-                    ForEach(letters, id: \.self) { letter in
-                        Button(action: {
-                            // TODO: Handle selection of letter
-                        }) {
-                            Text(letter)
-                                .font(.system(size: 12))
-                                .padding(.vertical, 4)
-                        }
-                        .frame(width: 30, height: 30)
-                        .background {
-                            Capsule()
-                                .foregroundColor(Color(UIColor.secondarySystemFill))
-                            //.foregroundColor(activated ? accentColor : Color(UIColor.secondarySystemFill))
-                                .opacity(0.5)
-                        }
-                        .cornerRadius(15)
-                    }
-                }
-                .padding(.horizontal, 8)
-            }
         }
     }
 }
