@@ -54,14 +54,12 @@ struct LibraryView: View {
                     baseItemOnSelect(item)
                 }
                 .ignoresSafeArea()
-            LetteredScrollbar(viewModel: viewModel.filterViewModel)
-                .onSelect { filterCoordinatorParameters in
-                    router.route(to: \.filter, filterCoordinatorParameters)
-                }
-                .padding(.vertical, 1)
+            LetteredScrollbar(viewModel: viewModel, onSelect: { letter in
+                viewModel.filterOnLetter(letter)
+            })
         }
     }
-
+    
     var body: some View {
         Group {
             if viewModel.isLoading && viewModel.items.isEmpty {
