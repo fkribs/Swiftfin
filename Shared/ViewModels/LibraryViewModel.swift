@@ -21,7 +21,8 @@ final class LibraryViewModel: PagingLibraryViewModel {
     let parent: LibraryParent?
     let type: LibraryParentType
     private let saveFilters: Bool
-
+    var filterLetter: String
+    
     var libraryCoordinatorParameters: LibraryCoordinator.Parameters {
         if let parent = parent {
             return .init(parent: parent, type: type, filters: filterViewModel.currentFilters)
@@ -44,6 +45,7 @@ final class LibraryViewModel: PagingLibraryViewModel {
         self.type = type
         self.filterViewModel = .init(parent: parent, currentFilters: filters)
         self.saveFilters = saveFilters
+        self.filterLetter = ""
         super.init()
 
         filterViewModel.$currentFilters
@@ -122,6 +124,7 @@ final class LibraryViewModel: PagingLibraryViewModel {
                 sortBy: sortBy,
                 enableUserData: true,
                 personIDs: personIDs,
+                nameStartsWith: filterLetter,
                 studioIDs: studioIDs,
                 genreIDs: genreIDs,
                 enableImages: true
@@ -141,6 +144,16 @@ final class LibraryViewModel: PagingLibraryViewModel {
         }
     }
 
+    func filterOnLetter(_ letter: String) {
+        
+        if filterLetter == letter {
+            filterLetter = ""
+        } else {
+            filterLetter = letter
+        }
+        requestItems(with: filterViewModel.currentFilters, replaceCurrentItems: true)
+    }
+    
     override func _requestNextPage() {
         requestItems(with: filterViewModel.currentFilters)
     }
