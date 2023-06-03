@@ -6,17 +6,20 @@
 // Copyright (c) 2023 Jellyfin & Jellyfin Contributors
 //
 
-import JellyfinAPI
+// Joe Kribs: joseph@kribs.net 02/06/2023
+// Sits horizontal to the LibraryView to filter results by letter
+// Similar to alphaPicker in Jellyfin-Web
+
+import Defaults
 import SwiftUI
 
 struct LetteredScrollbar: View {
     
     @ObservedObject
     var viewModel: LibraryViewModel
-
     var onSelect: ((String) -> Void)
 
-    //TODO: Locationalization? I'm not totally sure what that looks like for non-Romanic lettering
+    // TODO: Localization? I'm not totally sure what that looks like for non-Romanic lettering
     let letters: [String] = (0..<27).map { index in
         if index == 0 {
             return "#"
@@ -31,41 +34,57 @@ struct LetteredScrollbar: View {
     var body: some View {
         ScrollView {
             VStack(spacing: 0) {
-                Spacer()
                 ForEach(letters, id: \.self) { letter in
-                    Button(action: {
-                        selectLetter(letter)
-                        selectedLetter = letter
-                    }) {
-                        Text(letter)
-                            .font(.system(size: 14))
-                            .padding(.vertical, 2.3)
-                            .background(
-                                Circle()
-                                    .strokeBorder(Color.clear, lineWidth: 2)
-                                    .background(letter == selectedLetter ? Color(UIColor.secondarySystemFill) : Color.clear)
-                                    .clipShape(Circle())
-                            )
-                    }
-                    .frame(maxWidth: .infinity, alignment: .trailing)
+                    LetteredScrollbarLetter(
+                        letter: letter,
+                        activated: selectedLetter == letter,
+                        onSelect: onSelect)
+                        .onTapGesture {
+                            selectLetter(letter)
+                        }
+                        .frame(maxWidth: .infinity, alignment: .trailing)
                 }
-                Spacer()
             }
             .padding(.vertical, 10)
             .padding(.trailing, 10)
             .frame(width: 30)
+            
         }
-        .onAppear {
-            // Disable vertical scroll indicator appearance for the current view hierarchy
-            UIScrollView.appearance().showsVerticalScrollIndicator = false
-        }
-        .onDisappear {
-            // Enable vertical scroll indicator appearance when the view disappears
-            UIScrollView.appearance().showsVerticalScrollIndicator = true
+        .introspectScrollView { scrollView in
+            scrollView.showsVerticalScrollIndicator = false
         }
     }
-
+    
     private func selectLetter(_ letter: String) {
+        selectedLetter = letter
         onSelect(letter)
     }
+    
 }
+
+struct LetteredScrollbarLetter: View {
+    
+    @Default(.accentColor)
+    private var accentColor
+    
+    private let activated: Bool
+    private let letter: String
+    
+    init(activated: Bool, letter: String) {
+        self.activated = activated
+        self.letter = letter
+    }
+    
+    var body: some View {
+        Text(letter)
+            .font(.system(size: 14))
+            .padding(.vertical, 2.3)
+            .background(
+                Circle()
+                    .strokeBorder(Color.clear, lineWidth: 2)
+                    .background(activated ? Color(UIColor.secondarySystemFill) : Color.clear)
+                    .clipShape(Circle())
+            )
+    }
+}
+

@@ -54,9 +54,13 @@ struct LibraryView: View {
                     baseItemOnSelect(item)
                 }
                 .ignoresSafeArea()
+            // Joe Kribs: Start -->
+            // Added to allow for the LetteredScrollbar to filter the items returned down to the letter/symbol selected
             LetteredScrollbar(viewModel: viewModel, onSelect: { letter in
                 viewModel.filterOnLetter(letter)
             })
+            .padding(.horizontal, 1)
+            // <-- End: joseph@kribs.net 02/06/2023
         }
     }
 
