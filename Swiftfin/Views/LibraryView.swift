@@ -21,7 +21,7 @@ struct LibraryView: View {
 
     @ObservedObject
     var viewModel: LibraryViewModel
-
+    
     @ViewBuilder
     private var loadingView: some View {
         ProgressView()
@@ -29,7 +29,17 @@ struct LibraryView: View {
 
     @ViewBuilder
     private var noResultsView: some View {
-        L10n.noResults.text
+        // Joe Kribs: Start -->
+        // Changed to include the LetteredScrollbar. This allows users to remove a letter filter when there is no content found.
+        HStack(spacing: 0) {
+            Spacer()
+            L10n.noResults.text
+            Spacer()
+            LetteredScrollbar(viewModel: viewModel, onSelect: { letter in
+                viewModel.filterOnLetter(letter)
+            })
+        }
+        // <-- End: joseph@kribs.net 02/06/2023
     }
 
     private func baseItemOnSelect(_ item: BaseItemDto) {
@@ -53,13 +63,15 @@ struct LibraryView: View {
                 .onSelect { item in
                     baseItemOnSelect(item)
                 }
+                .padding(.trailing, 25)
                 .ignoresSafeArea()
             // Joe Kribs: Start -->
             // Added to allow for the LetteredScrollbar to filter the items returned down to the letter/symbol selected
-            LetteredScrollbar(viewModel: viewModel, onSelect: { letter in
-                viewModel.filterOnLetter(letter)
-            })
-            .padding(.horizontal, 1)
+            .overlay(
+                LetteredScrollbar(viewModel: viewModel, onSelect: { letter in
+                    viewModel.filterOnLetter(letter)
+                }),
+                alignment: .trailing)
             // <-- End: joseph@kribs.net 02/06/2023
         }
     }

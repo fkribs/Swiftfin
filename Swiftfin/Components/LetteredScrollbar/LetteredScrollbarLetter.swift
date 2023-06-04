@@ -21,52 +21,54 @@ extension LetteredScrollbar {
         private var accentColor
         
         private let letter: String
-        private let onSelect: (String) -> Void
+        private var viewModel: LibraryViewModel
+        private var onSelect: () -> Void
         
-        @State private var activated: Bool = false
+        @State private var activated: Bool
         
-        init(letter: String, activated: Bool, onSelect: @escaping (String) -> Void) {
+        init(letter: String, viewModel: LibraryViewModel, activated: Bool, onSelect: @escaping () -> Void) {
             self.letter = letter
+            self.viewModel = viewModel
             self.activated = activated
             self.onSelect = onSelect
         }
         
         var body: some View {
-            Button(action: {
-                selectLetter()
-            }) {
-                Text(letter)
-                    .font(.system(size: 14))
-                    .frame(width: 20, height: 20)
-                    .padding(7.5)
-                    .background {
-                        Circle()
-                            .foregroundColor(activated ? accentColor : Color(UIColor.secondarySystemFill))
-                            .opacity(activated ? 1.0 : 0.0)
-                    }
-                    .overlay {
-                        Circle()
-                            .stroke(activated ? accentColor : Color(UIColor.secondarySystemFill), lineWidth: 1)
-                            .opacity(activated ? 1.0 : 0.0)
-                    }
-            }
-            .frame(maxWidth: .infinity, alignment: .trailing)
-            .onTapGesture {
+            Button {
+                onSelect()
+                viewModel.filterOnLetter(letter)
                 activated.toggle()
+            } label: {
+                Text(letter)
+                    .font(.footnote.weight(.semibold))
+                    .frame(width: 15, height: 15)
+                    .padding(5)
+                    .foregroundColor(activated ? Color(UIColor.white) : accentColor)
+                    .opacity(1.0)
+                    .padding(.horizontal, 10)
+                    .padding(.vertical, 5)
+                    .background {
+                        RoundedRectangle(cornerRadius: 5)
+                            .frame(width: 20, height: 20)
+                            .foregroundColor(accentColor)
+                            .opacity(activated ? 0.5 : 0.0)
+                    }
             }
-        }
-        
-        private func selectLetter() {
-            activated.toggle()
-            onSelect(letter)
         }
     }
 }
 
 extension LetteredScrollbar.LetteredScrollbarLetter {
-    init(selectedLetter: String, activated: Bool, onSelect: @escaping (String) -> Void) {
-        self.init(letter: selectedLetter, activated: activated, onSelect: onSelect)
+    init(letter: String, viewModel: LibraryViewModel, activated: Bool) {
+        self.init(
+            letter: letter,
+            viewModel: viewModel,
+            activated: activated,
+            onSelect: {}
+        )
+    }
+
+    func onSelect(_ action: @escaping () -> Void) -> Self {
+        return self
     }
 }
-
-

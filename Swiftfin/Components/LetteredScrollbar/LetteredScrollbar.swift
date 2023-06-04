@@ -29,62 +29,22 @@ struct LetteredScrollbar: View {
         }
     }
 
-    @State private var selectedLetter: String?
-
     var body: some View {
         ScrollView {
             VStack(spacing: 0) {
                 ForEach(letters, id: \.self) { letter in
-                    LetteredScrollbarLetter(
-                        letter: letter,
-                        activated: selectedLetter == letter,
-                        onSelect: onSelect)
-                        .onTapGesture {
-                            selectLetter(letter)
-                        }
-                        .frame(maxWidth: .infinity, alignment: .trailing)
+                    LetteredScrollbarLetter(letter: letter, viewModel: viewModel, activated: false)
+                        .onSelect {}
+                        .id(letter)
                 }
+                .frame(maxWidth: .infinity, alignment: .trailing)
             }
-            .padding(.vertical, 10)
-            .padding(.trailing, 10)
-            .frame(width: 30)
-            
+            .padding(.vertical, 5)
+            .padding(.trailing, 5)
+            .frame(width: 35)
         }
         .introspectScrollView { scrollView in
             scrollView.showsVerticalScrollIndicator = false
         }
     }
-    
-    private func selectLetter(_ letter: String) {
-        selectedLetter = letter
-        onSelect(letter)
-    }
-    
 }
-
-struct LetteredScrollbarLetter: View {
-    
-    @Default(.accentColor)
-    private var accentColor
-    
-    private let activated: Bool
-    private let letter: String
-    
-    init(activated: Bool, letter: String) {
-        self.activated = activated
-        self.letter = letter
-    }
-    
-    var body: some View {
-        Text(letter)
-            .font(.system(size: 14))
-            .padding(.vertical, 2.3)
-            .background(
-                Circle()
-                    .strokeBorder(Color.clear, lineWidth: 2)
-                    .background(activated ? Color(UIColor.secondarySystemFill) : Color.clear)
-                    .clipShape(Circle())
-            )
-    }
-}
-
