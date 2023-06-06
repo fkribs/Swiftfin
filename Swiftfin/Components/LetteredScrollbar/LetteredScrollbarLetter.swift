@@ -13,62 +13,41 @@
 import Defaults
 import SwiftUI
 
-extension LetteredScrollbar {
+struct LetteredScrollbarLetter: View {
+
+    @Default(.accentColor) private var accentColor
+    private let letter: String
+    private let viewModel: LibraryViewModel
+    private let onSelect: (Bool) -> Void
     
-    struct LetteredScrollbarLetter: View {
-        
-        @Default(.accentColor)
-        private var accentColor
-        
-        private let letter: String
-        private var viewModel: LibraryViewModel
-        private var onSelect: () -> Void
-        
-        @State private var activated: Bool
-        
-        init(letter: String, viewModel: LibraryViewModel, activated: Bool, onSelect: @escaping () -> Void) {
-            self.letter = letter
-            self.viewModel = viewModel
-            self.activated = activated
-            self.onSelect = onSelect
-        }
-        
-        var body: some View {
-            Button {
-                onSelect()
-                viewModel.filterOnLetter(letter)
-                activated.toggle()
-            } label: {
-                Text(letter)
-                    .font(.footnote.weight(.semibold))
-                    .frame(width: 15, height: 15)
-                    .padding(5)
-                    .foregroundColor(activated ? Color(UIColor.white) : accentColor)
-                    .opacity(1.0)
-                    .padding(.horizontal, 10)
-                    .padding(.vertical, 5)
-                    .background {
-                        RoundedRectangle(cornerRadius: 5)
-                            .frame(width: 20, height: 20)
-                            .foregroundColor(accentColor)
-                            .opacity(activated ? 0.5 : 0.0)
-                    }
-            }
-        }
+    @Binding private var activated: Bool
+    
+    init(letter: String, viewModel: LibraryViewModel, activated: Bool, onSelect: @escaping (Bool) -> Void) {
+        self.letter = letter
+        self.viewModel = viewModel
+        self._activated = .constant(activated)
+        self.onSelect = onSelect
     }
-}
-
-extension LetteredScrollbar.LetteredScrollbarLetter {
-    init(letter: String, viewModel: LibraryViewModel, activated: Bool) {
-        self.init(
-            letter: letter,
-            viewModel: viewModel,
-            activated: activated,
-            onSelect: {}
-        )
-    }
-
-    func onSelect(_ action: @escaping () -> Void) -> Self {
-        return self
+    
+    var body: some View {
+        Button {
+            activated.toggle()
+            viewModel.filterOnLetter(letter)
+        } label: {
+            Text(letter)
+                .font(.footnote.weight(.semibold))
+                .frame(width: 15, height: 15)
+                .padding(5)
+                .foregroundColor(activated ? Color(UIColor.white) : accentColor)
+                .opacity(1.0)
+                .padding(.horizontal, 10)
+                .padding(.vertical, 5)
+                .background {
+                    RoundedRectangle(cornerRadius: 5)
+                        .frame(width: 20, height: 20)
+                        .foregroundColor(accentColor)
+                        .opacity(activated ? 0.5 : 0.0)
+                }
+        }
     }
 }

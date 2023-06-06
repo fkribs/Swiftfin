@@ -15,27 +15,45 @@ import SwiftUI
 
 struct LetteredScrollbar: View {
     
-    @ObservedObject
+    static let letters: [String] = [
+        "#", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M",
+        "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"
+    ]
+    
+    @Binding var activatedFlags: [String: Bool]
     var viewModel: LibraryViewModel
-    var onSelect: ((String) -> Void)
-
-    // TODO: Localization? I'm not totally sure what that looks like for non-Romanic lettering
-    let letters: [String] = (0..<27).map { index in
-        if index == 0 {
-            return "#"
-        } else {
-            let scalarValue = UnicodeScalar(Int("A".unicodeScalars.first!.value) + index - 1)!
-            return String(scalarValue)
+    var onSelect: (String) -> Void
+    
+    init(viewModel: LibraryViewModel, activatedFlags: Binding<[String: Bool]>, onSelect: @escaping (String) -> Void) {
+        self.viewModel = viewModel
+        self._activatedFlags = activatedFlags
+        self.onSelect = onSelect
+        updateActivatedFlags()
+    }
+    
+    private func updateActivatedFlags() {
+        for letter in Self.letters {
+            let isActive = viewModel.filterLetter == letter || (viewModel.filterLetterEnd == "A" && viewModel.filterLetter == "" && letter == "#")
+            activatedFlags[letter] = isActive
         }
     }
-
+    
     var body: some View {
         ScrollView {
             VStack(spacing: 0) {
-                ForEach(letters, id: \.self) { letter in
-                    LetteredScrollbarLetter(letter: letter, viewModel: viewModel, activated: false)
-                        .onSelect {}
+                ForEach(Self.letters, id: \.self) { letter in
+                    if let activated = activatedFlags[letter] {
+                        LetteredScrollbarLetter(
+                            letter: letter,
+                            viewModel: viewModel,
+                            activated: activated,
+                            onSelect: { activated in
+                                activatedFlags[letter] = activated
+                                onSelect(letter)
+                            }
+                        )
                         .id(letter)
+                    }
                 }
                 .frame(maxWidth: .infinity, alignment: .trailing)
             }
@@ -45,6 +63,9 @@ struct LetteredScrollbar: View {
         }
         .introspectScrollView { scrollView in
             scrollView.showsVerticalScrollIndicator = false
+        }
+        .onAppear {
+            updateActivatedFlags()
         }
     }
 }

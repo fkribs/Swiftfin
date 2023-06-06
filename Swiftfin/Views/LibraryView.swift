@@ -27,6 +27,8 @@ struct LibraryView: View {
         ProgressView()
     }
 
+    @State private var activatedFlags: [String: Bool] = [:]
+    
     @ViewBuilder
     private var noResultsView: some View {
         // Joe Kribs: Start -->
@@ -35,7 +37,7 @@ struct LibraryView: View {
             Spacer()
             L10n.noResults.text
             Spacer()
-            LetteredScrollbar(viewModel: viewModel, onSelect: { letter in
+            LetteredScrollbar(viewModel: viewModel, activatedFlags: $activatedFlags, onSelect: { letter in
                 viewModel.filterOnLetter(letter)
             })
         }
@@ -63,15 +65,15 @@ struct LibraryView: View {
                 .onSelect { item in
                     baseItemOnSelect(item)
                 }
-                .padding(.trailing, 25)
-                .ignoresSafeArea()
             // Joe Kribs: Start -->
             // Added to allow for the LetteredScrollbar to filter the items returned down to the letter/symbol selected
-            .overlay(
-                LetteredScrollbar(viewModel: viewModel, onSelect: { letter in
-                    viewModel.filterOnLetter(letter)
-                }),
-                alignment: .trailing)
+                .padding(.trailing, 25)
+                .ignoresSafeArea()
+                .overlay(
+                    LetteredScrollbar(viewModel: viewModel, activatedFlags: $activatedFlags, onSelect: { letter in
+                        viewModel.filterOnLetter(letter)
+                    }),
+                    alignment: .trailing)
             // <-- End: joseph@kribs.net 02/06/2023
         }
     }
