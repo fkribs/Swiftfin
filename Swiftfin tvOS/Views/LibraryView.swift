@@ -27,9 +27,18 @@ struct LibraryView: View {
     // TODO: add retry
     @ViewBuilder
     private var noResultsView: some View {
-        L10n.noResults.text
+        HStack(spacing: 0) {
+            Spacer()
+            L10n.noResults.text
+            Spacer()
+            LetteredScrollbar(viewModel: viewModel, activatedFlags: $activatedFlags, onSelect: { letter in
+                viewModel.filterOnLetter(letter)
+            })
+        }
     }
 
+    @State private var activatedFlags: [String: Bool] = [:]
+    
     private func baseItemOnSelect(_ item: BaseItemDto) {
         if let baseParent = viewModel.parent as? BaseItemDto {
             if baseParent.collectionType == "folders" {
@@ -45,12 +54,19 @@ struct LibraryView: View {
     }
 
     @ViewBuilder
-    private var libraryItemsView: some View {
-        PagingLibraryView(viewModel: viewModel)
-            .onSelect { item in
-                baseItemOnSelect(item)
-            }
-            .ignoresSafeArea()
+    var libraryItemsView: some View {
+        HStack(spacing: 0) {
+            PagingLibraryView(viewModel: viewModel)
+                .onSelect { item in
+                    baseItemOnSelect(item)
+                }
+                .ignoresSafeArea()
+                .overlay(
+                    LetteredScrollbar(viewModel: viewModel, activatedFlags: $activatedFlags, onSelect: { letter in
+                        viewModel.filterOnLetter(letter)
+                    }),
+                    alignment: .trailing)
+        }
     }
 
     var body: some View {

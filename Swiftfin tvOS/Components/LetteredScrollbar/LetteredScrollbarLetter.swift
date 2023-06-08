@@ -7,7 +7,7 @@
 //
 
 // Joe Kribs: joseph@kribs.net 02/06/2023
-// Used in the iOS & iPadOS portions of Swiftfin.
+// Used in the tvOS portions of Swiftfin.
 // Formats the Letters in the LetteredScrollbar
 
 import Defaults
@@ -16,7 +16,6 @@ import SwiftUI
 struct LetteredScrollbarLetter: View {
 
     @Default(.accentColor) private var accentColor
-    @Environment(\.colorScheme) var colorScheme
     private let letter: String
     private let viewModel: LibraryViewModel
     private let onSelect: (Bool) -> Void
@@ -31,24 +30,30 @@ struct LetteredScrollbarLetter: View {
     }
     
     var body: some View {
-        Button {
+        Button(action: {
             activated.toggle()
             viewModel.filterOnLetter(letter)
-        } label: {
+        }) {
             Text(letter)
                 .font(.footnote.weight(.semibold))
-                .frame(width: 15, height: 15)
-                .padding(5)
-                .foregroundColor(activated ? Color(UIColor.white) : accentColor)
-                .opacity(1.0)
-                .padding(.horizontal, 10)
-                .padding(.vertical, 5)
-                .background {
+                .shadow(color: Color.black.opacity(activated ? 0.0 : 1.0), radius: 1, x: 1, y: 1)
+                .foregroundColor(activated ? Color.white : accentColor)
+                .padding(10)
+                .padding(.horizontal, 1)
+                .lineLimit(1)
+                .minimumScaleFactor(0.7)
+                .fixedSize(horizontal: true, vertical: true)
+                .frame(width: 1, height: 35)
+                .background(
                     RoundedRectangle(cornerRadius: 5)
-                        .frame(width: 30, height: 30)
-                        .foregroundColor(activated ? accentColor.opacity(0.5) : Color(UIColor.clear).opacity(0.0))
-                }
+                        .fill(Color.clear)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 5)
+                                .frame(width: 32.5, height: 32.5)
+                                .foregroundColor(activated ? accentColor.opacity(1.0) : Color(UIColor.clear).opacity(0.0))
+                        )
+                )
         }
+        .buttonStyle(PlainButtonStyle())
     }
 }
-

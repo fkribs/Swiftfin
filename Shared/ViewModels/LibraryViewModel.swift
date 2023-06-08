@@ -21,13 +21,9 @@ final class LibraryViewModel: PagingLibraryViewModel {
     let parent: LibraryParent?
     let type: LibraryParentType
     private let saveFilters: Bool
-    
-    // Joe Kribs: Start -->
-    // Scrollbar Variables
     var filterLetter: String
     var filterLetterEnd: String
     @Published var letteredScrollbarLetter: [String: Bool] = [:]
-    // <-- End: joseph@kribs.net 02/06/2023
     
     var libraryCoordinatorParameters: LibraryCoordinator.Parameters {
         if let parent = parent {
@@ -131,11 +127,8 @@ final class LibraryViewModel: PagingLibraryViewModel {
                 sortBy: sortBy,
                 enableUserData: true,
                 personIDs: personIDs,
-                // Joe Kribs: Start -->
-                // Added to allow for the LetteredScrollbar to filter the items returned down to the letter/symbol selected
                 nameStartsWith: filterLetter,
                 nameLessThan: filterLetterEnd,
-                // <-- End: joseph@kribs.net 02/06/2023
                 studioIDs: studioIDs,
                 genreIDs: genreIDs,
                 enableImages: true
@@ -146,12 +139,9 @@ final class LibraryViewModel: PagingLibraryViewModel {
             guard let items = response.value.items, !items.isEmpty else {
                 self.hasNextPage = false
                 
-                // Joe Kribs: Start -->
-                // This prevents the perpetual loading bar when there is no more content in a letter filtered view
                 if filterLetter != "" || (filterLetterEnd == "A" && filterLetter == "") {
                     self.isLoading = false
                 }
-                // <-- End: joseph@kribs.net 02/06/2023
                 
                 return
             }
@@ -163,13 +153,8 @@ final class LibraryViewModel: PagingLibraryViewModel {
         }
     }
 
-    // Joe Kribs: Start -->
-    // Function to filter based on a letter selected from the LetteredScrollbar
     func filterOnLetter(_ letter: String) {
         
-        // If the letter is already selected as a filter, reset the filterLetter to empty
-        // If the # Symbol was selected we want to return all content that starts with a number or symbol. This means we leave the filterLetter blank
-        // and instead use the filterLetterEnd for an /items call using the nameLessThan fitler to return all values before A.
         if (filterLetter == letter || (filterLetterEnd == "A" && filterLetter == "" && letter == "#")) {
             filterLetter = ""
             filterLetterEnd = ""
@@ -178,15 +163,12 @@ final class LibraryViewModel: PagingLibraryViewModel {
             filterLetterEnd = ""
         }
         else {
-            // Otherwise, set the filterLetter to the letter selected
             filterLetter = ""
             filterLetterEnd = "A"
         }
         
-        // Update the activated flag for each letter
         updateActivatedFlags()
         
-        // Call to the API to replace all existing items with only items that start with the seleted letter or, if selected, don't exceed A.
         requestItems(with: filterViewModel.currentFilters, replaceCurrentItems: true)
     }
 
@@ -196,7 +178,6 @@ final class LibraryViewModel: PagingLibraryViewModel {
             letteredScrollbarLetter[letter] = isActive
         }
     }
-    // <-- End: joseph@kribs.net 02/06/2023
     
     override func _requestNextPage() {
         requestItems(with: filterViewModel.currentFilters)
