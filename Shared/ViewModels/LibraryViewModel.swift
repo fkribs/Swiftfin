@@ -21,6 +21,7 @@ final class LibraryViewModel: PagingLibraryViewModel {
     let parent: LibraryParent?
     let type: LibraryParentType
     private let saveFilters: Bool
+    var filterLetter: String
     
     var libraryCoordinatorParameters: LibraryCoordinator.Parameters {
         if let parent = parent {
@@ -44,6 +45,7 @@ final class LibraryViewModel: PagingLibraryViewModel {
         self.type = type
         self.filterViewModel = .init(parent: parent, currentFilters: filters)
         self.saveFilters = saveFilters
+        self.filterLetter = ""
         super.init()
 
         filterViewModel.$currentFilters

@@ -77,7 +77,7 @@ struct LibraryView: View {
             // <-- End: joseph@kribs.net 02/06/2023
         }
     }
-
+    
     var body: some View {
         Group {
             if viewModel.isLoading && viewModel.items.isEmpty {

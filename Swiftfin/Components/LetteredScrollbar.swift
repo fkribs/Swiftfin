@@ -10,14 +10,24 @@ import JellyfinAPI
 import SwiftUI
 
 struct LetteredScrollbar: View {
-
+    
     @ObservedObject
     var viewModel: FilterViewModel
     var onSelect: (FilterCoordinator.Parameters) -> Void
 
-    let letters: [String] = (0..<26).map { index in
-        String(UnicodeScalar("A".unicodeScalars.first!.value + index)!)
+    var onSelect: ((String) -> Void)
+
+    //TODO: Locationalization? I'm not totally sure what that looks like for non-Romanic lettering
+    let letters: [String] = (0..<27).map { index in
+        if index == 0 {
+            return "#"
+        } else {
+            let scalarValue = UnicodeScalar(Int("A".unicodeScalars.first!.value) + index - 1)!
+            return String(scalarValue)
+        }
     }
+
+    @State private var selectedLetter: String?
 
     var body: some View {
         ScrollView {
@@ -25,11 +35,18 @@ struct LetteredScrollbar: View {
                 Spacer()
                 ForEach(letters, id: \.self) { letter in
                     Button(action: {
-                        print(letter) // Print the letter when pressed
+                        selectLetter(letter)
+                        selectedLetter = letter
                     }) {
                         Text(letter)
                             .font(.system(size: 14))
                             .padding(.vertical, 2.3)
+                            .background(
+                                Circle()
+                                    .strokeBorder(Color.clear, lineWidth: 2)
+                                    .background(letter == selectedLetter ? Color(UIColor.secondarySystemFill) : Color.clear)
+                                    .clipShape(Circle())
+                            )
                     }
                     .frame(maxWidth: .infinity, alignment: .trailing)
                 }
@@ -37,7 +54,7 @@ struct LetteredScrollbar: View {
             }
             .padding(.vertical, 10)
             .padding(.trailing, 10)
-            .frame(width: 25)
+            .frame(width: 30)
         }
         .onAppear {
             // Disable vertical scroll indicator appearance for the current view hierarchy
@@ -56,7 +73,10 @@ extension LetteredScrollbar {
         self.onSelect = { _ in }
     }
 
+    private func selectLetter(_ letter: String) {
+        onSelect(letter)
     func onSelect(_ action: @escaping (FilterCoordinator.Parameters) -> Void) -> Self {
         copy(modifying: \.onSelect, with: action)
     }
 }
+
