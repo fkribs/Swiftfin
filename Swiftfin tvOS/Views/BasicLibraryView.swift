@@ -19,6 +19,8 @@ struct BasicLibraryView: View {
     @ObservedObject
     var viewModel: PagingLibraryViewModel
 
+    @State private var activatedFlags: [String: Bool] = [:]
+    
     @ViewBuilder
     private var loadingView: some View {
         ProgressView()
@@ -27,16 +29,30 @@ struct BasicLibraryView: View {
     // TODO: add retry
     @ViewBuilder
     private var noResultsView: some View {
-        L10n.noResults.text
+        HStack(spacing: 0) {
+            Spacer()
+            L10n.noResults.text
+            Spacer()
+            LetteredScrollbar(viewModel: viewModel, activatedFlags: $activatedFlags, onSelect: { letter in
+                viewModel.filterOnLetter(letter)
+            })
+        }
     }
 
     @ViewBuilder
     private var libraryItemsView: some View {
-        PagingLibraryView(viewModel: viewModel)
-            .onSelect { item in
-                router.route(to: \.item, item)
-            }
-            .ignoresSafeArea()
+        HStack(spacing: 0) {
+            PagingLibraryView(viewModel: viewModel)
+                .onSelect { item in
+                    router.route(to: \.item, item)
+                }
+                .ignoresSafeArea()
+                .overlay(
+                    LetteredScrollbar(viewModel: viewModel, activatedFlags: $activatedFlags, onSelect: { letter in
+                        viewModel.filterOnLetter(letter)
+                    }),
+                    alignment: .trailing)
+        }
     }
 
     var body: some View {

@@ -14,7 +14,7 @@ final class ItemTypeLibraryViewModel: PagingLibraryViewModel {
 
     let itemTypes: [BaseItemKind]
     let filterViewModel: FilterViewModel
-
+    
     init(itemTypes: [BaseItemKind], filters: ItemFilters) {
         self.itemTypes = itemTypes
         self.filterViewModel = .init(parent: nil, currentFilters: filters)
@@ -52,6 +52,8 @@ final class ItemTypeLibraryViewModel: PagingLibraryViewModel {
                 filters: itemFilters,
                 sortBy: sortBy,
                 enableUserData: true,
+                nameStartsWith: filterLetter,
+                nameLessThan: filterLetterEnd,
                 genreIDs: genreIDs
             )
             let request = Paths.getItems(parameters: parameters)
@@ -67,6 +69,37 @@ final class ItemTypeLibraryViewModel: PagingLibraryViewModel {
             }
         }
     }
+
+    override func filterOnLetter(_ letter: String) {
+        
+        if (filterLetter == letter || (filterLetterEnd == "A" && filterLetter == "" && letter == "#")) {
+            filterLetter = ""
+            filterLetterEnd = ""
+        } else if letter != "#" {
+            filterLetter = letter
+            filterLetterEnd = ""
+        }
+        else {
+            filterLetter = ""
+            filterLetterEnd = "A"
+        }
+        
+        updateActiveFilterLetter()
+        
+        requestItems(with: filterViewModel.currentFilters, replaceCurrentItems: true)
+    }
+
+    @Published var letteredScrollbarLetter: [String: Bool] = [:]
+    
+    private func updateActiveFilterLetter() {
+        for letter in letteredScrollbarLetters {
+            let isActive = (filterLetter == letter) || (filterLetterEnd == "A" && filterLetter == "" && letter == "#")
+            letteredScrollbarLetter[letter] = isActive
+            
+            print("Letter: \(letter), isActive: \(isActive)")
+        }
+    }
+
 
     override func _requestNextPage() {
         requestItems(with: filterViewModel.currentFilters)

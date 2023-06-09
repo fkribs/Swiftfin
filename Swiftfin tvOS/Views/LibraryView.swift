@@ -19,6 +19,8 @@ struct LibraryView: View {
     @ObservedObject
     var viewModel: LibraryViewModel
 
+    @State private var activatedFlags: [String: Bool] = [:]
+    
     @ViewBuilder
     private var loadingView: some View {
         ProgressView()
@@ -36,8 +38,6 @@ struct LibraryView: View {
             })
         }
     }
-
-    @State private var activatedFlags: [String: Bool] = [:]
     
     private func baseItemOnSelect(_ item: BaseItemDto) {
         if let baseParent = viewModel.parent as? BaseItemDto {

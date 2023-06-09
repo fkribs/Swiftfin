@@ -13,17 +13,17 @@
 import Defaults
 import SwiftUI
 
-struct LetteredScrollbarLetter: View {
+struct LetteredScrollbarButton: View {
 
     @Default(.accentColor) private var accentColor
     @Environment(\.colorScheme) var colorScheme
     private let letter: String
-    private let viewModel: LibraryViewModel
+    private let viewModel: PagingLibraryViewModel
     private let onSelect: (Bool) -> Void
     
     @Binding private var activated: Bool
     
-    init(letter: String, viewModel: LibraryViewModel, activated: Bool, onSelect: @escaping (Bool) -> Void) {
+    init(letter: String, viewModel: PagingLibraryViewModel, activated: Bool, onSelect: @escaping (Bool) -> Void) {
         self.letter = letter
         self.viewModel = viewModel
         self._activated = .constant(activated)
@@ -31,10 +31,10 @@ struct LetteredScrollbarLetter: View {
     }
     
     var body: some View {
-        Button {
+        Button(action: {
             activated.toggle()
             viewModel.filterOnLetter(letter)
-        } label: {
+        }) {
             Text(letter)
                 .font(.footnote.weight(.semibold))
                 .frame(width: 15, height: 15)

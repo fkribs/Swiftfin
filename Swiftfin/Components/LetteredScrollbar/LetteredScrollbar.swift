@@ -14,17 +14,12 @@ import Defaults
 import SwiftUI
 
 struct LetteredScrollbar: View {
-    
-    static let letters: [String] = [
-        "#", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M",
-        "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"
-    ]
-    
+        
     @Binding var activatedFlags: [String: Bool]
-    var viewModel: LibraryViewModel
+    var viewModel: PagingLibraryViewModel
     var onSelect: (String) -> Void
     
-    init(viewModel: LibraryViewModel, activatedFlags: Binding<[String: Bool]>, onSelect: @escaping (String) -> Void) {
+    init(viewModel: PagingLibraryViewModel, activatedFlags: Binding<[String: Bool]>, onSelect: @escaping (String) -> Void) {
         self.viewModel = viewModel
         self._activatedFlags = activatedFlags
         self.onSelect = onSelect
@@ -32,7 +27,7 @@ struct LetteredScrollbar: View {
     }
     
     private func updateActivatedFlags() {
-        for letter in Self.letters {
+        for letter in letteredScrollbarLetters {
             let isActive = viewModel.filterLetter == letter || (viewModel.filterLetterEnd == "A" && viewModel.filterLetter == "" && letter == "#")
             activatedFlags[letter] = isActive
         }
@@ -41,9 +36,9 @@ struct LetteredScrollbar: View {
     var body: some View {
         ScrollView {
             VStack(spacing: 0) {
-                ForEach(Self.letters, id: \.self) { letter in
+                ForEach(letteredScrollbarLetters, id: \.self) { letter in
                     if let activated = activatedFlags[letter] {
-                        LetteredScrollbarLetter(
+                        LetteredScrollbarButton(
                             letter: letter,
                             viewModel: viewModel,
                             activated: activated,

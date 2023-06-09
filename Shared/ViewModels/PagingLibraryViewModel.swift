@@ -19,7 +19,11 @@ class PagingLibraryViewModel: ViewModel {
 
     @Published
     var items: OrderedSet<BaseItemDto> = []
-
+    @Published
+    var filterLetter: String = ""
+    @Published
+    var filterLetterEnd: String = ""
+    
     var currentPage = 0
     var hasNextPage = true
 
@@ -42,6 +46,12 @@ class PagingLibraryViewModel: ViewModel {
         currentPage += 1
         _requestNextPage()
     }
-
+    
     func _requestNextPage() {}
+    
+    func filterOnLetter(_ letter: String) {
+        _filterOnLetter(letter: letter)
+    }
+    
+    func _filterOnLetter(letter: String) {}
 }

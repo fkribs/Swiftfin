@@ -21,9 +21,6 @@ final class LibraryViewModel: PagingLibraryViewModel {
     let parent: LibraryParent?
     let type: LibraryParentType
     private let saveFilters: Bool
-    var filterLetter: String
-    var filterLetterEnd: String
-    @Published var letteredScrollbarLetter: [String: Bool] = [:]
     
     var libraryCoordinatorParameters: LibraryCoordinator.Parameters {
         if let parent = parent {
@@ -47,8 +44,6 @@ final class LibraryViewModel: PagingLibraryViewModel {
         self.type = type
         self.filterViewModel = .init(parent: parent, currentFilters: filters)
         self.saveFilters = saveFilters
-        self.filterLetter = ""
-        self.filterLetterEnd = ""
         super.init()
 
         filterViewModel.$currentFilters
@@ -153,7 +148,7 @@ final class LibraryViewModel: PagingLibraryViewModel {
         }
     }
 
-    func filterOnLetter(_ letter: String) {
+    override func filterOnLetter(_ letter: String) {
         
         if (filterLetter == letter || (filterLetterEnd == "A" && filterLetter == "" && letter == "#")) {
             filterLetter = ""
@@ -166,18 +161,23 @@ final class LibraryViewModel: PagingLibraryViewModel {
             filterLetter = ""
             filterLetterEnd = "A"
         }
-        
-        updateActivatedFlags()
+
+        updateActiveFilterLetter()
         
         requestItems(with: filterViewModel.currentFilters, replaceCurrentItems: true)
     }
 
-    private func updateActivatedFlags() {
-        for letter in LetteredScrollbar.letters {
+    @Published var letteredScrollbarLetter: [String: Bool] = [:]
+    
+    private func updateActiveFilterLetter() {
+        for letter in letteredScrollbarLetters {
             let isActive = (filterLetter == letter) || (filterLetterEnd == "A" && filterLetter == "" && letter == "#")
             letteredScrollbarLetter[letter] = isActive
+            
+            print("Letter: \(letter), isActive: \(isActive)")
         }
     }
+
     
     override func _requestNextPage() {
         requestItems(with: filterViewModel.currentFilters)
