@@ -14,7 +14,7 @@ final class ItemTypeLibraryViewModel: PagingLibraryViewModel {
 
     let itemTypes: [BaseItemKind]
     let filterViewModel: FilterViewModel
-
+    
     init(itemTypes: [BaseItemKind], filters: ItemFilters) {
         self.itemTypes = itemTypes
         self.filterViewModel = .init(parent: nil, currentFilters: filters)
@@ -52,6 +52,8 @@ final class ItemTypeLibraryViewModel: PagingLibraryViewModel {
                 filters: itemFilters,
                 sortBy: sortBy,
                 enableUserData: true,
+                nameStartsWith: filterLetter,
+                nameLessThan: filterLetterEnd,
                 genreIDs: genreIDs
             )
             let request = Paths.getItems(parameters: parameters)
@@ -59,6 +61,9 @@ final class ItemTypeLibraryViewModel: PagingLibraryViewModel {
 
             guard let items = response.value.items, !items.isEmpty else {
                 hasNextPage = false
+                
+                isLoading = !(filterLetter != "" || (filterLetterEnd == "A" && filterLetter == ""))
+                
                 return
             }
 
@@ -66,6 +71,18 @@ final class ItemTypeLibraryViewModel: PagingLibraryViewModel {
                 self.items.append(contentsOf: items)
             }
         }
+    }
+
+    override func filterOnLetter(_ letter: String) {
+               
+        let filterLetterContainer: [String: String] = getFilterVariables(letter: letter, filterLetter: filterLetter, filterLetterEnd: filterLetterEnd)
+        
+        filterLetter = filterLetterContainer["filterLetter"] ?? ""
+        filterLetterEnd = filterLetterContainer["filterLetterEnd"] ?? ""
+        
+        updateActiveFilterLetter()
+        
+        requestItems(with: filterViewModel.currentFilters, replaceCurrentItems: true)
     }
 
     override func _requestNextPage() {

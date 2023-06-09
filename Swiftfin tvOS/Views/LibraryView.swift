@@ -19,6 +19,8 @@ struct LibraryView: View {
     @ObservedObject
     var viewModel: LibraryViewModel
 
+    @State private var activeScrollbarLetterStatus: [String: Bool] = [:]
+
     @ViewBuilder
     private var loadingView: some View {
         ProgressView()
@@ -27,9 +29,16 @@ struct LibraryView: View {
     // TODO: add retry
     @ViewBuilder
     private var noResultsView: some View {
-        L10n.noResults.text
+        HStack(spacing: 0) {
+            Spacer()
+            L10n.noResults.text
+            Spacer()
+            LetteredScrollbar(viewModel: viewModel, activatedLetters: $activeScrollbarLetterStatus, onSelect: { letter in
+                viewModel.filterOnLetter(letter)
+            })
+        }
     }
-
+    
     private func baseItemOnSelect(_ item: BaseItemDto) {
         if let baseParent = viewModel.parent as? BaseItemDto {
             if baseParent.collectionType == "folders" {
@@ -45,12 +54,20 @@ struct LibraryView: View {
     }
 
     @ViewBuilder
-    private var libraryItemsView: some View {
-        PagingLibraryView(viewModel: viewModel)
-            .onSelect { item in
-                baseItemOnSelect(item)
-            }
-            .ignoresSafeArea()
+    var libraryItemsView: some View {
+        HStack(spacing: 0) {
+            PagingLibraryView(viewModel: viewModel)
+                .onSelect { item in
+                    baseItemOnSelect(item)
+                }
+                .padding(.trailing, 25)
+                .ignoresSafeArea()
+                .overlay(
+                    LetteredScrollbar(viewModel: viewModel, activatedLetters: $activeScrollbarLetterStatus, onSelect: { letter in
+                        viewModel.filterOnLetter(letter)
+                    }),
+                    alignment: .trailing)
+        }
     }
 
     var body: some View {
