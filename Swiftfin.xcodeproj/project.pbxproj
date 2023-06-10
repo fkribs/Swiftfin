@@ -9,6 +9,10 @@
 /* Begin PBXBuildFile section */
 		091B5A8A2683142E00D78B61 /* ServerDiscovery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 091B5A872683142E00D78B61 /* ServerDiscovery.swift */; };
 		091B5A8D268315D400D78B61 /* ServerDiscovery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 091B5A872683142E00D78B61 /* ServerDiscovery.swift */; };
+		4E6A9B312A33D76800131FD8 /* LetteredScrollbarButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E6A9B2F2A33D76800131FD8 /* LetteredScrollbarButton.swift */; };
+		4E6A9B322A33D76800131FD8 /* LetteredScrollbarButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E6A9B2F2A33D76800131FD8 /* LetteredScrollbarButton.swift */; };
+		4E6A9B332A33D76800131FD8 /* LetteredScrollbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E6A9B302A33D76800131FD8 /* LetteredScrollbar.swift */; };
+		4E6A9B342A33D76800131FD8 /* LetteredScrollbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E6A9B302A33D76800131FD8 /* LetteredScrollbar.swift */; };
 		531690E7267ABD79005D8AB9 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531690E6267ABD79005D8AB9 /* HomeView.swift */; };
 		53192D5D265AA78A008A4215 /* DeviceProfileBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53192D5C265AA78A008A4215 /* DeviceProfileBuilder.swift */; };
 		531AC8BF26750DE20091C7EB /* ImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531AC8BE26750DE20091C7EB /* ImageView.swift */; };
@@ -762,6 +766,8 @@
 
 /* Begin PBXFileReference section */
 		091B5A872683142E00D78B61 /* ServerDiscovery.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ServerDiscovery.swift; sourceTree = "<group>"; };
+		4E6A9B2F2A33D76800131FD8 /* LetteredScrollbarButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LetteredScrollbarButton.swift; sourceTree = "<group>"; };
+		4E6A9B302A33D76800131FD8 /* LetteredScrollbar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LetteredScrollbar.swift; sourceTree = "<group>"; };
 		531690E6267ABD79005D8AB9 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		531690F9267AD6EC005D8AB9 /* PlainNavigationLinkButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlainNavigationLinkButton.swift; sourceTree = "<group>"; };
 		53192D5C265AA78A008A4215 /* DeviceProfileBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceProfileBuilder.swift; sourceTree = "<group>"; };
@@ -1484,6 +1490,8 @@
 		535870AB2669D8D300D05A09 /* Objects */ = {
 			isa = PBXGroup;
 			children = (
+				4E6A9B302A33D76800131FD8 /* LetteredScrollbar.swift */,
+				4E6A9B2F2A33D76800131FD8 /* LetteredScrollbarButton.swift */,
 				E1D4BF802719D22800A11E64 /* AppAppearance.swift */,
 				53192D5C265AA78A008A4215 /* DeviceProfileBuilder.swift */,
 				E17FB55128C119D400311DFE /* Displayable.swift */,
@@ -2913,7 +2921,7 @@
 		6286F09E271C093000C40ED5 /* R.swift */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
-			buildActionMask = 2147483647;
+			buildActionMask = 12;
 			files = (
 			);
 			inputFileListPaths = (
@@ -2932,7 +2940,7 @@
 		6286F0A3271C0ABA00C40ED5 /* R.swift */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
-			buildActionMask = 2147483647;
+			buildActionMask = 12;
 			files = (
 			);
 			inputFileListPaths = (
@@ -2956,6 +2964,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E193D53627193F8500900D82 /* LibraryCoordinator.swift in Sources */,
+				4E6A9B322A33D76800131FD8 /* LetteredScrollbarButton.swift in Sources */,
 				E1CCC3D228C858A50020ED54 /* UserProfileButton.swift in Sources */,
 				C4BE07742725EB66003F4AD1 /* LiveTVProgramsView.swift in Sources */,
 				E18845F626DD631E00B0C5B7 /* BaseItemDto+Poster.swift in Sources */,
@@ -3131,6 +3140,7 @@
 				E1D9F475296E86D400129AF3 /* NativeVideoPlayer.swift in Sources */,
 				E1575E7D293E77B5001665B1 /* PosterType.swift in Sources */,
 				E1E5D553278419D900692DFE /* ConfirmCloseOverlay.swift in Sources */,
+				4E6A9B342A33D76800131FD8 /* LetteredScrollbar.swift in Sources */,
 				E18A17F2298C68BB00C22F62 /* MainOverlay.swift in Sources */,
 				E1E6C44B29AED2B70064123F /* HorizontalAlignment.swift in Sources */,
 				E193D549271941CC00900D82 /* UserSignInView.swift in Sources */,
@@ -3462,6 +3472,7 @@
 				E1E6C44C29AED2BE0064123F /* HorizontalAlignment.swift in Sources */,
 				E1A1528D28FD23AC00600579 /* VideoPlayerSettingsCoordinator.swift in Sources */,
 				E18E01EE288747230022598C /* AboutView.swift in Sources */,
+				4E6A9B332A33D76800131FD8 /* LetteredScrollbar.swift in Sources */,
 				62E632E0267D30CA0063E547 /* LibraryViewModel.swift in Sources */,
 				E1B33EB028EA890D0073B0FD /* Equatable.swift in Sources */,
 				E1549662296CA2EF00C4EF88 /* NewSessionManager.swift in Sources */,
@@ -3490,6 +3501,7 @@
 				E1CFE28028FA606800B7D34C /* ChapterTrack.swift in Sources */,
 				E1401CA22938122C00E8B599 /* AppIcons.swift in Sources */,
 				E1BDF2FB2952502300CC0294 /* SubtitleActionButton.swift in Sources */,
+				4E6A9B312A33D76800131FD8 /* LetteredScrollbarButton.swift in Sources */,
 				E17FB55728C1256400311DFE /* CastAndCrewHStack.swift in Sources */,
 				62E632E3267D3BA60063E547 /* MovieItemViewModel.swift in Sources */,
 				E113133828BEADBA00930F75 /* LibraryParent.swift in Sources */,
